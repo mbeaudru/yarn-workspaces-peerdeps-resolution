@@ -17,6 +17,25 @@ We want to be able to dev on *package-a* while it is linked in *project-a* and a
 
 - *project-a* has a **dependency** on **log-version@1.1.0** and on *package-a* (version doesn't matter)
 
+```
+workspaces
+  |-- node_modules
+    |-- log-version@1.0.0
+  |-- packages
+    |-- package-a (peerDependency: log-version ^1.0.0)
+    |-- package-b (dependency: log-version@1.0.0)
+    |-- package-c (dependency: log-version@1.0.0)
+
+project-a
+  |-- node_modules
+    |-- log-version@1.1.0
+    |-- package-a
+  package.json
+    * dependency:
+      - log-version@1.1.0
+      - package-a
+```
+
 ### In dev
 
 We link *package-a* in *project-a* and run *project-a*:
@@ -26,10 +45,44 @@ We link *package-a* in *project-a* and run *project-a*:
 
 **BUT**, *package-a* in fact uses **log-version@1.0.0** because it is found in the workspaces root *node_modules* before!
 
+Follow the steps, having in mind that *package-a* is linked into *project-a*:
+
+```
+workspaces
+  |-- node_modules // STEP 3
+    |-- log-version@1.0.0 // STEP 4
+  |-- packages
+    |-- package-a (peerDependency: log-version ^1.0.0) // STEP 2
+    |-- package-b (dependency: log-version@1.0.0)
+    |-- package-c (dependency: log-version@1.0.0)
+
+project-a
+  |-- node_modules
+    |-- log-version@1.1.0
+    |-- package-a // STEP 1
+  package.json
+    * dependency:
+      - log-version@1.1.0
+      - package-a
+```
+
 ### In production
 
 - *project-a* has **log-version@1.1.0** in dependency so uses version **1.1.0** when running
 - *package-a* has **log-version ^1.0.0** in *peerDependency* so running in *project-a*, uses **log-version@1.1.0**
+
+When not linked, we do have:
+
+```
+project-a
+  |-- node_modules
+    |-- log-version@1.1.0 // STEP 2
+    |-- package-a // STEP 1
+  package.json
+    * dependency:
+      - log-version@1.1.0
+      - package-a
+```
 
 ## Steps to reproduce
 
@@ -54,6 +107,40 @@ If we copy directly *package-a* in *project-a*:
 This ensures that there will be no differences between prod & dev results.
 
 But copy is not free and costs more horse power, because in dev mode we want files to be copied on file change, which requires to have watchers on *package-a* that will trigger the copy operation. It doesn't scale if you want to chain package links, which can happen sometimes.
+
+### Colocate a devDep for each peerDep
+
+We could make a trick in adding to *package-a* a devDependency for log-version and make this match the version provided by *project-a*.
+
+Follow the steps, having in mind that *package-a* is linked into *project-a*: 
+
+```
+workspaces
+  |-- node_modules
+    |-- log-version@1.0.0
+  |-- packages
+    |-- package-a
+    |-- node_modules // STEP 2
+      |-- log-version@1.1.0 // STEP 3
+    package.json
+      * peerDependency:
+        - log-version ^1.0.0
+      * devDependency:
+        - log-version@1.1.0
+
+project-a
+  |-- node_modules
+    |-- log-version@1.1.0
+    |-- package-a // STEP 1
+  package.json
+    * dependency:
+      - log-version@1.1.0
+      - package-a
+```
+
+But it requires you to make sure the project and the devDependency are the same for each peerDependency for this to work, which is a pain for the teams.
+
+Last but not least, using a peerDependency is usually involved because you want to use a single instance of a given dependency running in your application, so this "trick" is still not an option for some cases. It still is not the same as the *unlink* workflow.
 
 ### Yarn PnP
 
