@@ -144,4 +144,8 @@ Last but not least, using a peerDependency is usually involved because you want 
 
 ### Yarn PnP
 
-Since plug'n play changes the way dependencies are resolved, it might entirely solve this problem. But when we tried to move to PnP we encountered other issues (that we might decide to overcome anyway), so at the moment we would want things to work without PnP unless we are sure it's the only way to make things work.
+Since plug'n play changes the way dependencies are resolved, it might entirely solve this problem.
+
+In fact, the branch *pnp* of this repo proves that it indeed works!
+
+But when we tried to move to PnP we encountered other issues (that we might decide to overcome anyway), so at the moment we would want things to work without PnP unless we are sure it's the only way to make things work.
