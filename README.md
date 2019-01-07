@@ -1,4 +1,4 @@
-# Working between workspaces and other projects with peerDependencies
+# Working between yarn workspaces and other projects with peerDependencies
 
 This repository is a meant to reproduce an issue we encountered in trying to work between a workspace and other repositories.
 
@@ -8,7 +8,7 @@ To be concrete, we have workspaces for components (more or less smart) and tooli
 
 ## The issue
 
-We want to be able to dev on *package-a* while it is linked in *project-a* and all have the same results than in prod.
+We want to be able to dev on *package-a* while it is linked in *project-a* and always have the same results than in prod.
 
 - *package-a* belongs to the workspace and has a **peerDependency** on **log-version ^1.0.0**
 - *package-b* and *package-c* belongs to the workspace and both have a dependency on **log-version@1.0.0**
@@ -53,7 +53,7 @@ If we copy directly *package-a* in *project-a*:
 
 This ensures that there will be no differences between prod & dev results.
 
-But copy is not free and costs more horse power, because in in dev mode we want files to be copied on file change, which requires to have watchers on *package-a* that will trigger the copy operation. It doesn't scale if you want to chain package links, which can happen sometimes.
+But copy is not free and costs more horse power, because in dev mode we want files to be copied on file change, which requires to have watchers on *package-a* that will trigger the copy operation. It doesn't scale if you want to chain package links, which can happen sometimes.
 
 ### Yarn PnP
 
