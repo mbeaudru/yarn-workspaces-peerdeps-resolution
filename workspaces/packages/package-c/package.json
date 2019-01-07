@@ -1,9 +1,9 @@
 {
-  "name": "workspace-a",
+  "name": "package-c",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "scripts": {
-    "start": "node index.js"
+  "dependencies": {
+    "log-version": "1.0.0"
   }
 }

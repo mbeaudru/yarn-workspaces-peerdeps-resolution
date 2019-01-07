@@ -1,0 +1,12 @@
+{
+  "name": "workspaces-peerdeps-resolution",
+  "version": "1.0.0",
+  "author": "Manuel BEAUDRU <manuel.beaudru@mirakl.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "cd project-a && yarn start",
+    "prepare": "yarn install-project-a && yarn install-workspaces",
+    "install-project-a": "cd project-a && yarn install",
+    "install-workspaces": "cd workspaces && yarn install"
+  }
+}
