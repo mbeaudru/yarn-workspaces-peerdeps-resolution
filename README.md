@@ -8,7 +8,7 @@ To be concrete, we have workspaces for components (more or less smart) and tooli
 
 ## The issue
 
-We want to be able to dev on *package-a* while it is linked in *project-a* and always have the same results than in prod.
+We want to be able to dev on *package-a* while it is linked in *project-a* and always have the same results than in prod, when packages are taken from the registry for instance.
 
 - *package-a* belongs to the workspace and has a **peerDependency** on **log-version ^1.0.0**
 - *package-b* and *package-c* belongs to the workspace and both have a dependency on **log-version@1.0.0**
